@@ -177,15 +177,53 @@ if submit_btn:
         - この経歴や志望動機から，面接でさらに深掘りされそうな質問を2つ予想し，どう答えると良いか（回答の方向性）を温かいトーンでアドバイスしてください。
         """
 
-        with st.spinner('キャリアコンサルタントAIが添削中です... 少しお待ちください。'):
+with st.spinner('AIが添削とアドバイスを作成しています...'):
             try:
                 response = model.generate_content(prompt)
                 st.success("添削が完了しました！")
                 st.markdown("---")
                 st.markdown(response.text)
+                
+                # --- ダウンロード用のテキストを組み立てる ---
+                download_text = f"""【求職者情報（あなたの入力内容）】
+■年齢 / 性別
+{age} / {gender}
+
+■簡単な職歴
+{history}
+
+■こだわった事/評価された事/夢中になった事
+{episodes}
+
+■強み/価値観
+{strengths}
+
+■作成した志望動機（ドラフト）
+{draft}
+
+--------------------------------------------------
+【求人情報（あなたの入力内容）】
+■職種 / 雇用形態
+{job_title} / {emp_type}
+
+■仕事内容
+{job_desc}
+
+■必要な免許・資格・スキル
+{requirements}
+
+==================================================
+【AIからの添削結果・アドバイス】
+{response.text}
+"""
+                
+                # --- ダウンロードボタン ---
+                st.markdown("---")
+                st.download_button(
+                    label="📝 入力内容と添削結果を保存（ダウンロード）する",
+                    data=download_text,
+                    file_name="resume_advice_result.txt",
+                    mime="text/plain"
+                )
             except Exception as e:
-                error_msg = str(e)
-                if "429" in error_msg or "Quota" in error_msg:
-                    st.error("エラー：APIの利用制限に達しました。1分ほど待つか，新しいAPIキーを取得して再度お試しください。")
-                else:
-                    st.error(f"予期せぬエラーが発生しました。詳細: {e}")
+                st.error(f"エラーが発生しました。詳細: {e}")
