@@ -7,8 +7,8 @@ st.set_page_config(page_title="志望動機添削アシスタント", layout="wi
 # --- カスタムCSS（壁紙・明朝体・桜色テーマ・スマホ対応） ---
 st.markdown("""
 <style>
-/* 1. 全体のフォントを游明朝に統一 */
-html, body, p, div, span, a, button, h1, h2, h3, h4, h5, h6, label {
+/* 1. 全体のフォントを游明朝に統一（※アイコンが壊れないよう span は除外しています） */
+html, body, p, div, a, button, h1, h2, h3, h4, h5, h6, label {
     font-family: 'Yu Mincho', '游明朝', 'YuMincho', 'Hiragino Mincho ProN', 'HGS明朝E', serif !important;
 }
 
