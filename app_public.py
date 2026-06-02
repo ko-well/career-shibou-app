@@ -4,22 +4,22 @@ import google.generativeai as genai
 # --- ページ設定 ---
 st.set_page_config(page_title="志望動機添削アシスタント", layout="wide")
 
-# --- カスタムCSS（游明朝・和紙背景・桜色ホバー） ---
+# --- カスタムCSS（壁紙・明朝体・桜色テーマ・スマホ対応） ---
 st.markdown("""
 <style>
-/* 全体のフォントを游明朝に統一 */
+/* 1. 全体のフォントを游明朝に統一 */
 html, body, p, div, span, a, button, h1, h2, h3, h4, h5, h6, label {
     font-family: 'Yu Mincho', '游明朝', 'YuMincho', 'Hiragino Mincho ProN', 'HGS明朝E', serif !important;
 }
 
-/* ページ全体の壁紙（和紙風テクスチャ） */
+/* 2. ページ全体の壁紙（和紙風テクスチャ） */
 .stApp {
     background-color: #FCFAFA;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
     background-attachment: fixed;
 }
 
-/* ヘッダーデザイン */
+/* 3. ヘッダーデザイン（PC用） */
 .header-box {
     text-align: center;
     padding: 3rem 1rem;
@@ -32,7 +32,7 @@ html, body, p, div, span, a, button, h1, h2, h3, h4, h5, h6, label {
 .header-title { font-size: 2.2rem; font-weight: 700; color: #3D2D2E; }
 .header-subtitle { font-size: 1.1rem; color: #5C4B4D; margin-top: 0.8rem; line-height: 1.6; }
 
-/* フォームとコンテナ、ボタン */
+/* 4. フォームと結果コンテナのデザイン */
 div[data-testid="stForm"] {
     background-color: rgba(255, 255, 255, 0.9) !important;
     border-radius: 8px !important;
@@ -50,6 +50,36 @@ div[data-testid="stForm"] {
     line-height: 1.8;
 }
 
+/* サブヘッダー色 */
+h3 { color: #3D2D2E !important; }
+
+/* ★5. スマートフォン向けの画面表示設定（レスポンシブ対応） */
+@media screen and (max-width: 768px) {
+    /* タイトル周りの縮小 */
+    .header-title { font-size: 1.5rem !important; }
+    .header-subtitle { font-size: 0.95rem !important; margin-top: 0.8rem !important; }
+    .header-box { padding: 2rem 1rem !important; }
+    
+    /* フォームや結果の余白を詰める */
+    div[data-testid="stForm"] { padding: 15px !important; }
+    .result-box { padding: 15px !important; font-size: 0.95rem !important; }
+    
+    /* 見出しとテキストの縮小 */
+    h3 { font-size: 1.2rem !important; margin-bottom: 0.5rem !important; }
+    p, label { font-size: 0.95rem !important; line-height: 1.6 !important; }
+    
+    /* スマホ用ボタン調整（横幅いっぱいにしてタップしやすく） */
+    [data-testid="stFormSubmitButton"] button, 
+    .stButton button, 
+    [data-testid="stLinkButton"] a {
+        padding: 0.6rem 1rem !important;
+        font-size: 1rem !important;
+        width: 100% !important;
+        text-align: center;
+    }
+}
+
+/* 6. ボタンのデザイン（PC用ベース） */
 [data-testid="stFormSubmitButton"] button, 
 .stButton button,
 [data-testid="stLinkButton"] a {
@@ -73,9 +103,6 @@ div[data-testid="stForm"] {
 [data-testid="stLinkButton"] a * {
     color: #ffffff !important;
 }
-
-/* サブヘッダー色 */
-h3 { color: #3D2D2E !important; }
 </style>
 """, unsafe_allow_html=True)
 
