@@ -111,7 +111,7 @@ st.markdown('''
 <div class="header-box">
     <div class="header-title">📝 志望動機添削アシスタント</div>
     <div class="header-subtitle">
-        求職者の情報と求人情報を入力すると、AIがプロのキャリアコンサルタント視点で志望動機を添削・作成します。
+        求職者の情報と求人情報を入力すると、AIがキャリアコンサルタント視点で志望動機を添削・作成します。
     </div>
 </div>
 ''', unsafe_allow_html=True)
