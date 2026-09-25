@@ -1,6 +1,22 @@
 import streamlit as st
 import google.generativeai as genai
 
+# --- AIモデルの自動フォールバック（切り替え）関数 ---
+# 最新版でエラーが起きた場合、自動的に従来版へ切り替えてアプリの停止を防ぎます。
+def generate_with_fallback(prompt_text):
+    try:
+        # 第一候補：最新モデル
+        model = genai.GenerativeModel('gemini-3.8-flash')
+        return model.generate_content(prompt_text)
+    except Exception as e_new:
+        try:
+            # 失敗した場合、自動的に従来のモデルに切り替える
+            model_old = genai.GenerativeModel('gemini-2.5-flash')
+            return model_old.generate_content(prompt_text)
+        except Exception as e_old:
+            # どちらも失敗した場合は詳細なエラーを返す
+            raise Exception(f"最新版エラー: {e_new} / 従来版エラー: {e_old}")
+
 # --- ページ設定 ---
 st.set_page_config(page_title="志望動機添削アプリ", layout="wide")
 st.title("キャリアコンサルタント（AI） 志望動機添削アプリ")
@@ -37,8 +53,6 @@ if submit_btn:
         # Streamlitのシークレット機能からAPIキーを読み込むように変更
         api_key = st.secrets["GEMINI_API_KEY"]
         genai.configure(api_key=api_key)
-        # 高速で高精度なモデルを指定
-        model = genai.GenerativeModel('gemini-2.5-flash')
 
         # プロンプトの構築（一緒に完成させたものを埋め込みます）
         prompt = f"""
@@ -105,7 +119,8 @@ if submit_btn:
 
         with st.spinner('キャリアコンサルタントAIが添削中です... 少しお待ちください。'):
             try:
-                response = model.generate_content(prompt)
+                # ★修正箇所：古いモデルの直接指定を消し、自動切り替え関数を呼び出しています
+                response = generate_with_fallback(prompt)
                 st.success("添削が完了しました！")
                 st.markdown("---")
                 st.markdown(response.text)
